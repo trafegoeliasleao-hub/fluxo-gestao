@@ -12,10 +12,10 @@ export async function middleware(request: NextRequest) {
         getAll() {
           return request.cookies.getAll()
         },
-        setAll(cookiesToSet) {
-          cookiesToSet.forEach(({ name, value }) => request.cookies.set(name, value))
+        setAll(cookiesToSet: any[]) {
+          cookiesToSet.forEach(({ name, value }: any) => request.cookies.set(name, value))
           supabaseResponse = NextResponse.next({ request })
-          cookiesToSet.forEach(({ name, value, options }) =>
+          cookiesToSet.forEach(({ name, value, options }: any) =>
             supabaseResponse.cookies.set(name, value, options)
           )
         },
@@ -27,10 +27,8 @@ export async function middleware(request: NextRequest) {
 
   const { pathname } = request.nextUrl
 
-  // Rotas públicas
   if (pathname.startsWith('/auth')) {
     if (user) {
-      // Já logado → redireciona para dashboard
       const { data: perfil } = await supabase
         .from('usuarios')
         .select('cargo')
@@ -43,13 +41,11 @@ export async function middleware(request: NextRequest) {
     return supabaseResponse
   }
 
-  // Rotas protegidas
   if (pathname.startsWith('/dashboard')) {
     if (!user) {
       return NextResponse.redirect(new URL('/auth/login', request.url))
     }
 
-    // Verifica se o usuário tem permissão para a rota
     const { data: perfil } = await supabase
       .from('usuarios')
       .select('cargo')
@@ -58,16 +54,10 @@ export async function middleware(request: NextRequest) {
 
     const cargo = perfil?.cargo || 'cliente'
 
-    // Admin pode acessar tudo
     if (cargo === 'admin') return supabaseResponse
-
-    // Gestor pode acessar /dashboard/gestor
     if (cargo === 'gestor' && pathname.startsWith('/dashboard/gestor')) return supabaseResponse
-
-    // Cliente pode acessar /dashboard/cliente
     if (cargo === 'suporte' && pathname.startsWith('/dashboard/cliente')) return supabaseResponse
 
-    // Redireciona para o dashboard correto
     if (!pathname.startsWith(`/dashboard/${cargo}`)) {
       return NextResponse.redirect(new URL(`/dashboard/${cargo}`, request.url))
     }
