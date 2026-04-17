@@ -1,4 +1,4 @@
-'use client'
+
 import { createClient } from '@/lib/supabase/server'
 import { DollarSign, Users, MessageSquare, TrendingUp, AlertCircle } from 'lucide-react'
 import MetricCard from '@/components/ui/MetricCard'
@@ -131,8 +131,8 @@ export default async function AdminDashboard() {
             <tbody>
               {clientes?.map((cliente) => (
                 <tr key={cliente.id} style={{ borderBottom: '1px solid var(--border-subtle)' }}
-                  onMouseEnter={(e) => e.currentTarget.style.background = 'var(--border-subtle)'}
-                  onMouseLeave={(e) => e.currentTarget.style.background = 'transparent'}
+                  
+                  
                 >
                   <td style={{ padding: '14px 24px' }}>
                     <span style={{ fontSize: '14px', fontWeight: 500, color: 'var(--text-primary)' }}>
