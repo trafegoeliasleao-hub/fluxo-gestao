@@ -40,7 +40,7 @@ export default async function GestorDashboard() {
     .in('cliente_id', clienteIds)
     .gte('data_conversa', dataInicioStr) : { data: [] }
 
-  const totalGasto = resultados?.reduce((s, r) => s + (r.valor_gasto || 0), 0) || 0
+  const totalGasto = (resultados ?? []).reduce((s: number, r) => s + (Number(r.valor_gasto) || 0), 0)
   const totalConversas = conversas?.length || 0
   const totalVendas = conversas?.filter(c => c.virou_venda).length || 0
   const cpl = totalConversas > 0 ? totalGasto / totalConversas : 0
