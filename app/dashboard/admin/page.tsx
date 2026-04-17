@@ -1,3 +1,4 @@
+'use client'
 import { createClient } from '@/lib/supabase/server'
 import { DollarSign, Users, MessageSquare, TrendingUp, AlertCircle } from 'lucide-react'
 import MetricCard from '@/components/ui/MetricCard'
