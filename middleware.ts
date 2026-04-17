@@ -27,6 +27,9 @@ export async function middleware(request: NextRequest) {
 
   const { pathname } = request.nextUrl
 
+  if (pathname.startsWith('/auth/reset-password')) {
+    return supabaseResponse
+  }
   if (pathname.startsWith('/auth')) {
     if (user) {
       const { data: perfil } = await supabase
